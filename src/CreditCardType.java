@@ -2,7 +2,7 @@
 public enum CreditCardType {
 	
 	VISA,
-	MasterCard,
+	MASTERCARD,
 	AMEX
 
 }
