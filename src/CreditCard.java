@@ -12,6 +12,7 @@ public class CreditCard {
 	private double creditCardLimit;
 	private double currentBalance;
 	private double availCredit;
+	//decide on data structure
 	private Transaction[] transactions;
 	
 	public CreditCard(String creditCardID, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
