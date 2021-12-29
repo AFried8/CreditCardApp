@@ -49,5 +49,9 @@ public class Transaction {
 		this.transactionType = transactionType;
 	}
 	
+	public double getTransactionAmt() {
+		return transactionAmt;
+	}
+	
 
 }
