@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class CreditCard {
 	
@@ -13,7 +14,7 @@ public class CreditCard {
 	private double currentBalance;
 	private double availCredit;
 	//decide on data structure
-	private Transaction[] transactions;
+	private ArrayList<Transaction> transactions = new ArrayList<>();
 	
 	public CreditCard(String creditCardID, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
 						CreditCardType creditCardType, CreditCardStatus creditCardStatus, double creditCardLimit,
