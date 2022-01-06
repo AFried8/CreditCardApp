@@ -1,15 +1,17 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CreditCard {
+public class CreditCard implements Comparable<CreditCard>{
 	
-	private String creditCardID;
+	private String cardNumber;
+	private String cardName;
 	private LocalDate issueDate;
 	private LocalDate expirationDate;
 	//Not sure what issueCompany is
 	private String issueCompany;
 	private CreditCardType creditCardType;
-	private CreditCardStatus creditCardStatus;
+	private CreditCardStatus cardStatus;
 	private double creditCardLimit;
 	private double currentBalance;
 	private double availCredit;
@@ -20,16 +22,17 @@ public class CreditCard {
 	private ArrayList<Payment> payments;
 	private ArrayList<Fee> fees;
 	
-	public CreditCard(String creditCardID, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
-						CreditCardType creditCardType, CreditCardStatus creditCardStatus, double creditCardLimit,
+	public CreditCard(String cardNumber, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
+						CreditCardType cardType, CreditCardStatus cardStatus, double cardLimit,
 						double currentBalance, double availCredit) {
-		this.creditCardID = creditCardID;
+		this.cardNumber = cardNumber;
+		this.cardName = (cardType + "-" + cardNumber.substring(cardNumber.length()-5));
 		this.issueDate = issueDate;
 		this.expirationDate = expirationDate;
 		this.issueCompany = issueCompany;
-		this.creditCardType = creditCardType;
-		this.creditCardStatus = creditCardStatus;
-		this.creditCardLimit = creditCardLimit;
+		this.creditCardType = cardType;
+		this.cardStatus = cardStatus;
+		this.creditCardLimit = cardLimit;
 		this.currentBalance = currentBalance;
 		this.availCredit = availCredit;
 		//transactions = new ArrayList<>();
@@ -38,6 +41,9 @@ public class CreditCard {
 		fees = new ArrayList<>();
 	}
 	
+	public String getCardName() {
+		return cardName;
+	}
 	
 	public void addPurchase(double transactionAmt, LocalDate transactionDate, PurchaseType purchaseType, Vendor vendor) throws OutOfCreditException{
 		//questionable if the input validation belongs here
@@ -122,6 +128,68 @@ public class CreditCard {
 			}
 			return mostRecentPayment;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		str.append(issueCompany + "-" + creditCardType);
+		str.append("\n" + cardNumber);
+		str.append("\n" + expirationDate);
+		return str.toString();
+	}
+	
+	public String status() {
+		StringBuilder str = new StringBuilder(this.toString());
+		str.append("\nBalance: " + currentBalance);
+		str.append("\nAvailable Credit: " + availCredit);
+		return str.toString();
+	}
+
+	public CreditCardStatus getCardStatus() {
+		return cardStatus;
+	}
+	
+	public HashMap<String, Double> largestPurchase(){
+		HashMap<String, Double> purchase = new HashMap<>();
+		double largestPurchase = 0;
+		for(Purchase p: purchases) {
+			if (p.getTransactionAmt() > largestPurchase) {
+				largestPurchase = p.getTransactionAmt();
+				purchase.put(p.getName(), p.getTransactionAmt());
+				}
+		}
+		return purchase;
+	}
+	
+	@Override
+	public int compareTo(CreditCard other) {
+		return cardNumber.compareTo(other.getCardNumber());
+	}
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CreditCard other = (CreditCard) obj;
+		if (cardNumber == null) {
+			if (other.cardNumber != null)
+				return false;
+		} else if (!cardNumber.equals(other.cardNumber))
+			return false;
+		return true;
+	}
+	
+	
+
 
 	/* private long getLastTransactionID() {
 		long lastTransactionID;

@@ -4,12 +4,14 @@ public class Purchase extends Transaction{
 
 	private PurchaseType purchaseType;
 	private Vendor vendor;
+	private String name;
 	
 	public Purchase(long lastTransactionID, double transactionAmt, LocalDate transactionDate, 
 			PurchaseType purchaseType, Vendor vendor) {
 		super(lastTransactionID, transactionAmt, transactionDate, TransactionType.PURCHASE);
 		this.purchaseType = purchaseType;
 		this.vendor = vendor;
+		name = (vendor + ": " + transactionAmt);
 	}
 
 	public PurchaseType getPurchaseType() {
@@ -26,6 +28,10 @@ public class Purchase extends Transaction{
 
 	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	
