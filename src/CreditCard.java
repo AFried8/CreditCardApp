@@ -95,6 +95,10 @@ public class CreditCard implements Comparable<CreditCard>{
 		return availCredit;
 	}
 	
+	public double getCreditLimit() {
+		return creditCardLimit;
+	}
+	
 	public double getTotalfees() {
 		double totalFees = 0;
 		for(Fee f: fees) {

@@ -73,6 +73,23 @@ public class CreditCards {
 		cards.get(index-1).addPayment(paymentType, account, transactionAmt, transactionDate);
 	}	
 	
+	public double getCardBalance(int index) {
+		return cards.get(index-1).getCurrentBalance();
+	}
+	public double getCardAvailCredit(int index) {
+		return cards.get(index-1).getAvailCredit();
+	}
+	public double getCardCreditLimit(int index) {
+		return cards.get(index-1).getCreditLimit();
+	}
+	
+	//did we really want that method to return a purchase...?
+	public Purchase getRecentPurchase(int index) {
+		return cards.get(index-1).getMostRecentPurchase();
+	}
+	public Payment getRecentPayment(int index) {
+		return cards.get(index-1).getMostRecentPayment();
+	}
 	
 	
 	

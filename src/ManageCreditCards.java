@@ -93,7 +93,38 @@ public class ManageCreditCards {
 	}
 	
 	public void manageCard() {
+		System.out.println("Which card would you like to manage?");
+		System.out.println(myCards.toString());		//do we have a to string??
+		int cardChoice = input.nextInt();
+		cardChoice = validate(1, /*max of myCard's array list*/, cardChoice);
 		
+		System.out.println(manageCard);
+		int choice = input.nextInt();
+		choice = validate(1, manageCard.getMax(), choice);
+		
+		switch(choice) {
+		case 1:
+			System.out.println("Current balance is " + myCards.getCardBalance(cardChoice));
+			break;
+		case 2:
+			System.out.println("Credit Limit is " + myCards.getCardCreditLimit(cardChoice));
+			break;
+		case 3:
+			System.out.println("Available credit is " + myCards.getCardAvailCredit(cardChoice));
+			break;
+		case 4:
+			addPurchase(cardChoice);
+			break;
+		case 5:
+			addFee(cardChoice);
+			break;
+		case 6:
+			System.out.println("Most recent purchase is " + myCards.getRecentPurchase(cardChoice));
+			break;
+		case 7:
+			System.out.println("Most recent payment is " + myCards.getRecentPayment(cardChoice));
+			break;
+		}
 	}
 	
 
