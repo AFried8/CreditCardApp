@@ -48,15 +48,6 @@ public class CreditCards {
 		}
 	}
 	
-	public String largestPurchase() {
-		int largestPurchase = 0;
-		for(CreditCard card: cards) {
-			if(card.largestPurchase().values(). > largestPurchase) {
-				largestPurchase = card.largestPurchase();
-			}
-		}
-	}
-	
 	public void removeCard(int index) {
 		cards.remove(index-1);
 	}
@@ -81,6 +72,42 @@ public class CreditCards {
 	}
 	public double getCardCreditLimit(int index) {
 		return cards.get(index-1).getCreditLimit();
+	}
+	
+	public String largestPurchase() {
+		double largestPurchase = 0.0;
+		String largestPurchaseName = "";
+		for(CreditCard card: cards) {
+			Double cardsLargestPurchase = Double.parseDouble(card.largestPurchase().split("##")[0]);
+			if(cardsLargestPurchase > largestPurchase) {
+				largestPurchase = cardsLargestPurchase;
+				largestPurchaseName = card.largestPurchase().split("##")[1];
+			}
+		}
+		return largestPurchaseName;
+	}
+	
+	public PurchaseType biggestSpendingArea() {
+		//Doesn't deal with if two categories have same amount spent. will just return the first occurrence
+		//If no purchases have been made on any cards, will return first PurchaseType enum
+		double[] overallSpendingReview = new double[PurchaseType.values().length];
+		for(CreditCard card: cards) {
+			double[] spendingReview = card.spendingReview();
+			for(int i = 0; i<spendingReview.length; i++) {
+				overallSpendingReview[i] += spendingReview[i];
+			}
+		}
+		
+		double mostMoneySpent = 0;
+		int mostMoneySpentCategory = 0;
+		for(int j = 0; j<overallSpendingReview.length; j++) {
+			if(overallSpendingReview[j] > mostMoneySpent) {
+				mostMoneySpent = overallSpendingReview[j];
+				mostMoneySpentCategory = j;
+			}
+		}
+		
+		return PurchaseType.values()[mostMoneySpentCategory];
 	}
 	
 	//did we really want that method to return a purchase...?

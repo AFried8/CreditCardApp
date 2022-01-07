@@ -91,6 +91,11 @@ public class CreditCard implements Comparable<CreditCard>{
 		return largestPurchase;
 	}
 	
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+	
 	public double getAvailCredit() {
 		return availCredit;
 	}
@@ -106,6 +111,7 @@ public class CreditCard implements Comparable<CreditCard>{
 		}
 		return totalFees;
 	}
+	
 	
 	public Purchase getMostRecentPurchase() {
 		//Check in CreditCards if Purchases is empty
@@ -133,15 +139,6 @@ public class CreditCard implements Comparable<CreditCard>{
 			return mostRecentPayment;
 	}
 	
-	@Override
-	public String toString() {
-		StringBuilder str = new StringBuilder();
-		str.append(issueCompany + "-" + creditCardType);
-		str.append("\n" + cardNumber);
-		str.append("\n" + expirationDate);
-		return str.toString();
-	}
-	
 	public String status() {
 		StringBuilder str = new StringBuilder(this.toString());
 		str.append("\nBalance: " + currentBalance);
@@ -153,28 +150,45 @@ public class CreditCard implements Comparable<CreditCard>{
 		return cardStatus;
 	}
 	
-	public HashMap<String, Double> largestPurchase(){
-		HashMap<String, Double> purchase = new HashMap<>();
-		double largestPurchase = 0;
+	public String largestPurchase(){
+		String purchaseData = "";
+		Double largestPurchase = 0.0;
 		for(Purchase p: purchases) {
 			if (p.getTransactionAmt() > largestPurchase) {
 				largestPurchase = p.getTransactionAmt();
-				purchase.put(p.getName(), p.getTransactionAmt());
+				purchaseData = largestPurchase.toString() + "##" + p.getName();
 				}
 		}
-		return purchase;
+		return purchaseData;
+	}
+	
+	public double[] spendingReview() {
+		double[] spendingReview = new double[PurchaseType.values().length];
+		for(Purchase p: purchases) {
+			for(int i = 0; i< PurchaseType.values().length; i++) {
+				if(p.getPurchaseType() == PurchaseType.values()[i]) {
+					spendingReview[i] +=p.getTransactionAmt();
+				}
+			}
+		}
+		return spendingReview;
+	}
+
+
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		str.append(issueCompany + "-" + creditCardType);
+		str.append("\n" + cardNumber);
+		str.append("\n" + expirationDate);
+		return str.toString();
 	}
 	
 	@Override
 	public int compareTo(CreditCard other) {
 		return cardNumber.compareTo(other.getCardNumber());
 	}
-
-	public String getCardNumber() {
-		return cardNumber;
-	}
-
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
