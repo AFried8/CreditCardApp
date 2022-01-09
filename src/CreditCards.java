@@ -118,6 +118,10 @@ public class CreditCards {
 		return cards.get(index-1).getMostRecentPayment();
 	}
 	
+	public int getMax() {
+		return cards.size()-1;
+	}
+	
 	
 	
 	

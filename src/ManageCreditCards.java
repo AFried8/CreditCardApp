@@ -96,7 +96,7 @@ public class ManageCreditCards {
 		System.out.println("Which card would you like to manage?");
 		System.out.println(myCards.toString());		//do we have a to string??
 		int cardChoice = input.nextInt();
-		cardChoice = validate(1, /*max of myCard's array list*/, cardChoice);
+		cardChoice = validate(1, myCards.getMax(), cardChoice);
 		
 		System.out.println(manageCard);
 		int choice = input.nextInt();
@@ -135,5 +135,15 @@ public class ManageCreditCards {
 			userInput = input.nextInt();
 		}
 		return userInput;
+	}
+	
+	public void removeCard() {
+		System.out.println("Which card would you like to remove?");
+		System.out.println(myCards.toString());		//do we have a to string??
+		int cardChoice = input.nextInt();
+		cardChoice = validate(1, myCards.getMax(), cardChoice);
+		
+		myCards.removeCard(cardChoice);
+		
 	}
 }
