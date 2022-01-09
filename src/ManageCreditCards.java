@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ManageCreditCards {
@@ -126,7 +127,7 @@ public class ManageCreditCards {
 			break;
 		}
 	}
-	
+
 
 	public int validate(int min, int max, int userInput) {
 		
@@ -144,6 +145,38 @@ public class ManageCreditCards {
 		cardChoice = validate(1, myCards.getMax(), cardChoice);
 		
 		myCards.removeCard(cardChoice);
+		
+	}
+	
+
+	private void addFee(int cardChoice) {
+		double amount;
+		LocalDate date;
+		FeeType type;
+		
+		System.out.print("Please enter fee amount: ");
+		amount = input.nextDouble();
+		//validate
+		
+		System.out.print("\nPlease enter fee date: ");
+		date = LocalDate.parse(input.next());
+		//validate
+		
+		System.out.println("1- Late Payment \n2- Interest");
+		System.out.print("\nPlease the number corresponding to the fee type: ");
+		int choice = input.nextInt();
+		choice = validate(1, 2, choice);
+		
+		switch(choice) {
+		case 1: 
+			type = FeeType.LATE_PAYMENT;
+			break;
+		case 2:
+			type = FeeType.INTEREST;
+			break;
+		}
+		
+		myCards.addFee(cardChoice, amount, date, TransactionType.FEE, type);
 		
 	}
 }
