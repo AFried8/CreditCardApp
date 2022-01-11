@@ -77,7 +77,35 @@ public class CreditCards {
 	public int getNumberOfCards() {
 		return cards.size();
 	}
+	public LocalDate getExpirationDate(int index) {
+		return cards.get(index-1).getExpirationDate();
+	}
 	
+	public LocalDate getIssueDate(int index) {
+		return cards.get(index-1).getIssueDate();
+	}
+	
+	public boolean hasPurchases(int index) {
+		if (cards.get(index-1).hasPurchases()) {
+			return true;
+		} return false;
+	}
+	
+	public boolean hasPurchases() {
+		for(int i = 1; i <= cards.size(); i++) {
+			if(hasPurchases(i)) {
+				return true;
+			}
+		} return false;
+	}
+	public boolean hasPayment(int index) {
+		if (cards.get(index-1).hasPayment()) {
+			return true;
+		} return false;
+	}
+	public CreditCardStatus getCardStatus(int index) {
+		return cards.get(index-1).getCardStatus();
+	}
 	public String largestPurchase() {
 		double largestPurchase = 0.0;
 		String largestPurchaseName = "";
@@ -125,7 +153,7 @@ public class CreditCards {
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		for(int i = 0; i<cards.size(); i++) {
-			str.append((i+1) + ". " + cards.get(i).getCardName());
+			str.append((i+1) + ". " + cards.get(i).getCardName() + "\n");
 		}		
 		return str.toString();
 	}

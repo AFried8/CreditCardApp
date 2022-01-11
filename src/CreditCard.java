@@ -104,6 +104,13 @@ public class CreditCard implements Comparable<CreditCard>{
 		return cardName;
 	}
 	
+	public LocalDate getExpirationDate() {
+		return expirationDate;
+	}
+	
+	public LocalDate getIssueDate() {
+		return issueDate;
+	}
 	public double getTotalfees() {
 		double totalFees = 0;
 		for(Fee f: fees) {
@@ -116,7 +123,8 @@ public class CreditCard implements Comparable<CreditCard>{
 	public Purchase getMostRecentPurchase() {
 		//Check in CreditCards if Purchases is empty
 		LocalDate mostRecentPurchaseDate = LocalDate.parse("1900-01-01");
-		Purchase mostRecentPurchase = purchases.get(0);
+		if(!purchases.isEmpty()) {
+			Purchase mostRecentPurchase = purchases.get(0);
 		for(Purchase p: purchases) {
 			if(p.getTransactionDate().compareTo(mostRecentPurchaseDate)>0) {
 				mostRecentPurchaseDate = p.getTransactionDate();
@@ -124,8 +132,10 @@ public class CreditCard implements Comparable<CreditCard>{
 			}
 		}
 		return mostRecentPurchase;
+		}else {
+			throw new RuntimeException("There are no purchases on this credit card!"); 
+		}
 	}
-	
 	public Payment getMostRecentPayment() {
 		//Check in CreditCards if Purchases is empty
 			LocalDate mostRecentPaymentDate = LocalDate.parse("1900-01-01");
@@ -138,7 +148,13 @@ public class CreditCard implements Comparable<CreditCard>{
 			}
 			return mostRecentPayment;
 	}
+	public boolean hasPurchases() {
+		return purchases.size() > 0;
+	}
 	
+	public boolean hasPayment() {
+		return payments.size() > 0;
+	}
 	public String status() {
 		StringBuilder str = new StringBuilder(this.toString());
 		str.append("\nBalance: " + currentBalance);

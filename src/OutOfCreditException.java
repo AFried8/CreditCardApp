@@ -2,7 +2,7 @@
 public class OutOfCreditException extends Exception{
 	
 	public OutOfCreditException() {
-		super();
+		super("Out of credit!!");
 	}
 	
 	public OutOfCreditException(String message) {
