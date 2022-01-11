@@ -22,7 +22,7 @@ public class Menu {
 	public String toString() {
 		StringBuilder str = new StringBuilder(name);
 		for(int i = 0; i<= options.size()-1; i++) {
-			str.append((i+1) + ". " + options.get(i) + "\n");
+			str.append("\n" + (i+1) + ". " + options.get(i));
 		}
 		return str.toString();
 	}

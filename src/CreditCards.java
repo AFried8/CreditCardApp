@@ -74,6 +74,10 @@ public class CreditCards {
 		return cards.get(index-1).getCreditLimit();
 	}
 	
+	public int getNumberOfCards() {
+		return cards.size();
+	}
+	
 	public String largestPurchase() {
 		double largestPurchase = 0.0;
 		String largestPurchaseName = "";
@@ -122,10 +126,12 @@ public class CreditCards {
 		return cards.size()-1;
 	}
 	
-	
-	
-	
-	
-	
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		for(int i = 0; i<cards.size(); i++) {
+			str.append((i+1) + ". " + cards.get(i).getCardName());
+		}		
+		return str.toString();
+	}
 	
 }

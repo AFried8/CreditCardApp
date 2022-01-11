@@ -6,13 +6,14 @@ public class ManageCreditCards {
 	Scanner input = new Scanner(System.in);
 	CreditCards myCards;
 	Menu mainMenu;
-	Menu manageCards;
+	Menu manageWallet;
 	Menu financialStats;
 	Menu manageCard;
 	
 	public ManageCreditCards() {
 		myCards = new CreditCards();
 		createMenus();
+		mainMenu();
 	}
 	
 	private void createMenus() {
@@ -22,9 +23,9 @@ public class ManageCreditCards {
 		mainMenu.addOption("Manage specific card");
 		mainMenu.addOption("Exit");
 		
-		manageCards = new Menu("Manage my wallet");
-		manageCards.addOption("Add a new credit card");
-		manageCards.addOption("Remove a credit card");
+		manageWallet = new Menu("Manage my wallet");
+		manageWallet.addOption("Add a new credit card");
+		manageWallet.addOption("Remove a credit card");
 		
 		financialStats = new Menu("Financial Stats");
 		financialStats.addOption("See my total balance");
@@ -48,7 +49,7 @@ public class ManageCreditCards {
 		choice = validate(1, mainMenu.getMax(), choice);
 		switch (choice) {
 		case 1:
-			manageCards();
+			manageWallet();
 			break;
 		case 2: 
 			financialStats();
@@ -61,13 +62,13 @@ public class ManageCreditCards {
 		}
 	}
 	
-	public void manageCards() {
-		System.out.println(manageCards);
+	public void manageWallet() {
+		System.out.println(manageWallet);
 		int choice = input.nextInt();
-		choice = validate(1, manageCards.getMax(), choice);
+		choice = validate(1, manageWallet.getMax(), choice);
 		switch (choice) {
 		case 1:
-			addCard();
+			//addCard();
 			break;
 		case 2:
 			removeCard();
@@ -75,27 +76,32 @@ public class ManageCreditCards {
 	}
 	
 	public void financialStats() {
-		System.out.println(financialStats);
-		int choice = input.nextInt();
-		choice = validate(1, financialStats.getMax(), choice);
-		switch (choice) {
-		case 1: 
-			System.out.println("The total balance of all your cards is " + myCards.totalBalance());
-			break;
-		case 2:
-			System.out.println("Your total available credit is " + myCards.totalAvailCredit());
-			break;
-		case 3:
-			System.out.println("Your largest purchase was " + myCards.largestPurchase());
-			break;
-		case 4:
-			System.out.println("Your biggest spending area is " + myCards.biggestSpendingArea());
+		if(myCards.getNumberOfCards() < 1) {
+			System.out.println("Sorry you don't have any financial stats since you didn't register any cards yet");
+		}
+		else {
+			System.out.println(financialStats);
+			int choice = input.nextInt();
+			choice = validate(1, financialStats.getMax(), choice);
+			switch (choice) {
+			case 1: 
+				System.out.println("The total balance of all your cards is " + myCards.totalBalance());
+				break;
+			case 2:
+				System.out.println("Your total available credit is " + myCards.totalAvailCredit());
+				break;
+			case 3:
+				System.out.println("Your largest purchase was " + myCards.largestPurchase());
+				break;
+			case 4:
+				System.out.println("Your biggest spending area is " + myCards.biggestSpendingArea());
+			}
 		}
 	}
 	
 	public void manageCard() {
 		System.out.println("Which card would you like to manage?");
-		System.out.println(myCards.toString());		//do we have a to string??
+		System.out.println(myCards.toString());
 		int cardChoice = input.nextInt();
 		cardChoice = validate(1, myCards.getMax(), cardChoice);
 		
@@ -114,7 +120,7 @@ public class ManageCreditCards {
 			System.out.println("Available credit is " + myCards.getCardAvailCredit(cardChoice));
 			break;
 		case 4:
-			addPurchase(cardChoice);
+			//addPurchase(cardChoice);
 			break;
 		case 5:
 			addFee(cardChoice);
@@ -156,13 +162,13 @@ public class ManageCreditCards {
 		
 		System.out.print("Please enter fee amount: ");
 		amount = input.nextDouble();
-		//validate
+		amount.validate(0, Integer.MAX_VALUE, amount);
 		
 		System.out.print("\nPlease enter fee date: ");
 		date = LocalDate.parse(input.next());
 		//validate
 		
-		System.out.println("1- Late Payment \n2- Interest");
+		System.out.println("1. Late Payment \n2. Interest");
 		System.out.print("\nPlease the number corresponding to the fee type: ");
 		int choice = input.nextInt();
 		choice = validate(1, 2, choice);
@@ -176,7 +182,7 @@ public class ManageCreditCards {
 			break;
 		}
 		
-		myCards.addFee(cardChoice, amount, date, TransactionType.FEE, type);
+		//myCards.addFee(cardChoice, amount, date, TransactionType.FEE, type);
 		
 	}
 }

@@ -41,10 +41,6 @@ public class CreditCard implements Comparable<CreditCard>{
 		fees = new ArrayList<>();
 	}
 	
-	public String getCardName() {
-		return cardName;
-	}
-	
 	public void addPurchase(double transactionAmt, LocalDate transactionDate, PurchaseType purchaseType, Vendor vendor) throws OutOfCreditException{
 		//questionable if the input validation belongs here
 		if(transactionAmt > availCredit) {
@@ -102,6 +98,10 @@ public class CreditCard implements Comparable<CreditCard>{
 	
 	public double getCreditLimit() {
 		return creditCardLimit;
+	}
+	
+	public String getCardName() {
+		return cardName;
 	}
 	
 	public double getTotalfees() {
