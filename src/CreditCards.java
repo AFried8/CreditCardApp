@@ -37,8 +37,8 @@ public class CreditCards {
 	
 	public boolean addCard(String cardNumber, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
 						CreditCardType cardType, CreditCardStatus cardStatus, double cardLimit,
-						double currentBalance, double availCredit) {
-		CreditCard newCard = new CreditCard(cardNumber, issueDate, expirationDate, issueCompany, cardType, cardStatus, cardLimit, currentBalance, availCredit);
+						double currentBalance) {
+		CreditCard newCard = new CreditCard(cardNumber, issueDate, expirationDate, issueCompany, cardType, cardStatus, cardLimit, currentBalance);
 		if(cards.contains(newCard)) {
 			return false;
 		}
@@ -120,10 +120,6 @@ public class CreditCards {
 	}
 	public Payment getRecentPayment(int index) {
 		return cards.get(index-1).getMostRecentPayment();
-	}
-	
-	public int getMax() {
-		return cards.size()-1;
 	}
 	
 	public String toString() {

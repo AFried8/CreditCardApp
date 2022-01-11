@@ -15,7 +15,7 @@ public class Menu {
 	}
 	
 	public int getMax() {
-		return options.size()-1;
+		return options.size();
 	}
 	
 	@Override
