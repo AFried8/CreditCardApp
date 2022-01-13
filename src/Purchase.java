@@ -37,8 +37,8 @@ public class Purchase extends Transaction{
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append("Vendor: " + vendor.getName());
-		str.append("- " + getTransactionAmt());
+		str.append(vendor.getName());
+		str.append("-" + getTransactionAmt());
 		
 		return str.toString();
 	}

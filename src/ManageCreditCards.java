@@ -106,14 +106,14 @@ public class ManageCreditCards {
 					if(myCards.hasPurchases()) {
 						System.out.println("Your largest purchase was " + myCards.largestPurchase());
 					} else {
-						System.out.println("There are no purchases on any card");
+						System.out.println("You have not made any purchases yet");
 					}
 					break;
 				case 4:
 					if(myCards.hasPurchases()) {
 						System.out.println("Your biggest spending area is " + myCards.biggestSpendingArea());
 					} else {
-						System.out.println("There are no purchases on any card");
+						System.out.println("You have not made any purchases yet");
 					}
 					break;
 				}
@@ -130,7 +130,8 @@ public class ManageCreditCards {
 			do {
 				System.out.println("Which card would you like to manage?");
 				System.out.println(myCards.toString());
-				int cardChoice = Validate.getCheckInt(1, myCards.getNumberOfCards());
+				System.out.println(myCards.getNumberOfCards() + 1 + ". Return to previous menu");
+				int cardChoice = Validate.getCheckInt(1, myCards.getNumberOfCards()+1);
 				
 				System.out.println(manageCard);
 				choice = Validate.getCheckInt(1, manageCard.numberOfOptions());
@@ -156,7 +157,7 @@ public class ManageCreditCards {
 					break;
 				case 7:
 					if(myCards.hasPurchases(cardChoice)) {
-						System.out.println("Most recent purchase is " + myCards.getRecentPurchase(cardChoice));
+						System.out.println("Most recent purchase was " + myCards.getRecentPurchase(cardChoice));
 					} else {
 						System.out.println("No purchases have been made on this card");
 					}
@@ -168,8 +169,10 @@ public class ManageCreditCards {
 						System.out.println("No payments have been made on this card");
 					}
 					break;
+				case 9:
+					manageCard();
 				}
-			} while(choice < 9);
+			} while(choice < 10);
 		}
 	}
 	
@@ -197,13 +200,14 @@ public class ManageCreditCards {
 		type = CreditCardType.values()[cardTypeChoice-1];
 		
 		System.out.println("What is the card number?");
-		input.nextLine();
+		//input.nextLine();
 		cardNumber = input.nextLine();
 		while((type == CreditCardType.AMEX && cardNumber.length() != 15) 
 				|| (type != CreditCardType.AMEX && cardNumber.length() != 16)) {
 			System.out.println("Amex cards should be 15 digits long. All other cards, 16.");
 			cardNumber = input.nextLine();
 		}
+	
 		
 		System.out.println("When was the card issued? Please enter as yyyy-mm-dd");
 		String userDate = input.nextLine();
@@ -235,19 +239,20 @@ public class ManageCreditCards {
 		currentBalance = Validate.checkDouble(-50.0, creditLimit, currentBalance);
 		
 		myCards.addCard(cardNumber, issueDate, expirationDate, issueCompany, type, status, creditLimit, currentBalance);
+		System.out.println("Card added \n");
 	}
 	
 	public void removeCard() {
 		if(myCards.getNumberOfCards() < 1) {
-			System.out.println("Sorry, there are no cards registered.");
+			System.out.println("Sorry, there are no cards registered.\n");
 		}
 		else {
 			System.out.println("Which card would you like to remove?");
 			System.out.println(myCards.toString());
 			int cardChoice = Validate.getCheckInt(1, myCards.getNumberOfCards());
 			myCards.removeCard(cardChoice);
-		}
-		
+			System.out.println("Card removed \n");
+		}		
 	}
 	
 	private void addPurchase(int cardChoice) {
@@ -277,7 +282,6 @@ public class ManageCreditCards {
 			}
 			int purchaseChoice = Validate.getCheckInt(1, 8);
 			purchaseType = PurchaseType.values()[purchaseChoice-1];
-			input.nextLine();
 			
 			vendor = getVendor();
 				try {
@@ -287,6 +291,8 @@ public class ManageCreditCards {
 				}
 			
 		}
+		System.out.println("Purchase added \n");
+		
 	}
 	
 	private Vendor getVendor() {
@@ -294,13 +300,13 @@ public class ManageCreditCards {
 		System.out.println("What is the vendor name?");
 		String name = input.nextLine();
 		
-		System.out.println("What is the street?");
+		System.out.println("What is the vendor's street address?");
 		String street = input.nextLine();
 		
-		System.out.println("What is the city?");
+		System.out.println("What is the vendor's city?");
 		String city = input.nextLine();
 		
-		System.out.println("What is the state?");
+		System.out.println("What is the vendor's state?");
 		
 		for(int i = 0; i< States.values().length; i++) {
 			if(i % 10 == 0) {
@@ -349,7 +355,7 @@ public class ManageCreditCards {
 	    transactionDate = Validate.checkDate(userDate, myCards.getIssueDate(cardChoice)); 
 	    
 	    myCards.addPayment(cardChoice, paymentType, account, transAmount, transactionDate);
-		
+		System.out.println("Payment added \n");
 		
 	}
 	

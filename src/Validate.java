@@ -36,7 +36,7 @@ public class Validate {
 			invalidFormat = false;
 			}
 			catch(Exception e) {
-				System.out.println("Please enter the date as yyyy-mm-dd");
+				System.out.println("That is not valid as a date. Please enter the date as yyyy-mm-dd");
 				userInput = input.nextLine();
 			}
 		}
