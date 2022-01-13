@@ -142,11 +142,10 @@ public class CreditCards {
 		return PurchaseType.values()[mostMoneySpentCategory];
 	}
 	
-	//did we really want that method to return a purchase...?
-	public Purchase getRecentPurchase(int index) {
+	public String getRecentPurchase(int index) {
 		return cards.get(index-1).getMostRecentPurchase();
 	}
-	public Payment getRecentPayment(int index) {
+	public String getRecentPayment(int index) {
 		return cards.get(index-1).getMostRecentPayment();
 	}
 	

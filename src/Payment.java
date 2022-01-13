@@ -4,14 +4,12 @@ public class Payment extends Transaction{
 
 	private PaymentType paymentType;
 	private BankAccount account;
-	private double transactionAmt;
 	
 	public Payment(PaymentType paymentType, BankAccount account, long lastTransactionID, 
 					double transactionAmt, LocalDate transactionDate) {
 		super(lastTransactionID, transactionAmt, transactionDate, TransactionType.PAYMENT);
 		this.paymentType = paymentType;
 		this.account = account;
-		this.transactionAmt = transactionAmt;
 	}
 
 	public PaymentType getPaymentType() {
@@ -34,7 +32,7 @@ public class Payment extends Transaction{
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		str.append("Payment Type: " + paymentType);
-		str.append("\nAmount: " + transactionAmt);
+		str.append("\nAmount: " + getTransactionAmt());
 		return str.toString();
 	}
 }
