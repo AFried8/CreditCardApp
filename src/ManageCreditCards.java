@@ -26,7 +26,7 @@ public class ManageCreditCards {
 		manageWallet = new Menu("Manage my wallet");
 		manageWallet.addOption("Add a new credit card");
 		manageWallet.addOption("Remove a credit card");
-		manageWallet.addOption("Return to previous main menu");
+		manageWallet.addOption("Return to main menu");
 		
 		financialStats = new Menu("Financial Stats");
 		financialStats.addOption("See my total balance");
@@ -44,14 +44,15 @@ public class ManageCreditCards {
 		manageCard.addOption("Add a fee");
 		manageCard.addOption("See my most recent purchase");
 		manageCard.addOption("See my most recent payment");
-		manageCard.addOption("Return to main menu");
+		manageCard.addOption("Return to card list");
 	}
 	
 	public void mainMenu() {
 		int choice; 
 		do {
 			System.out.println(mainMenu);
-			choice = Validate.getCheckInt(1, mainMenu.numberOfOptions());
+			choice = input.nextInt();
+			choice = Validate.checkInt(1, mainMenu.numberOfOptions(), choice);
 			switch (choice) {
 			case 1:
 				manageWallet();
@@ -60,7 +61,7 @@ public class ManageCreditCards {
 				financialStats();
 				break;
 			case 3:
-				manageCard();
+				availableCards();
 				break;
 			default:
 				System.out.println("Exiting... Thank you for using this program!");
@@ -72,7 +73,8 @@ public class ManageCreditCards {
 		int choice;
 		do {
 			System.out.println(manageWallet);
-			choice = Validate.getCheckInt(1, manageWallet.numberOfOptions());
+			choice = input.nextInt();
+			choice = Validate.checkInt(1, manageWallet.numberOfOptions(), choice);
 			switch (choice) {
 			case 1:
 				addCard();
@@ -93,14 +95,15 @@ public class ManageCreditCards {
 			
 			do {
 				System.out.println(financialStats);
-				choice = Validate.getCheckInt(1, financialStats.numberOfOptions());
+				choice = input.nextInt();
+				choice = Validate.checkInt(1, financialStats.numberOfOptions(), choice);
 				
 				switch (choice) {
 				case 1: 
-					System.out.println("The total balance of all your cards is " + myCards.totalBalance());
+					System.out.println("The total balance of all your cards is $" + myCards.totalBalance());
 					break;
 				case 2:
-					System.out.println("Your total available credit is " + myCards.totalAvailCredit());
+					System.out.println("Your total available credit is $" + myCards.totalAvailCredit());
 					break;
 				case 3:
 					if(myCards.hasPurchases()) {
@@ -121,59 +124,72 @@ public class ManageCreditCards {
 		}
 	}
 	
-	public void manageCard() {
+	public void availableCards() {
 		if(myCards.getNumberOfCards() < 1) {
 			System.out.println("Sorry you don't have any cards to manage since you didn't register any cards. ");
 		}
 		else {
-			int choice;
-			do {
-				System.out.println("Which card would you like to manage?");
-				System.out.println(myCards.toString());
-				System.out.println(myCards.getNumberOfCards() + 1 + ". Return to previous menu");
-				int cardChoice = Validate.getCheckInt(1, myCards.getNumberOfCards()+1);
-				
-				System.out.println(manageCard);
-				choice = Validate.getCheckInt(1, manageCard.numberOfOptions());
-				
-				switch(choice) {
-				case 1:
-					System.out.println("Current balance is " + myCards.getCardBalance(cardChoice));
-					break;
-				case 2:
-					System.out.println("Credit Limit is " + myCards.getCardCreditLimit(cardChoice));
-					break;
-				case 3:
-					System.out.println("Available credit is " + myCards.getCardAvailCredit(cardChoice));
-					break;
-				case 4:
-					addPurchase(cardChoice);
-					break;
-				case 5:
-					addPayment(cardChoice);
-					break;
-				case 6:
-					addFee(cardChoice);
-					break;
-				case 7:
-					if(myCards.hasPurchases(cardChoice)) {
-						System.out.println("Most recent purchase was " + myCards.getRecentPurchase(cardChoice));
-					} else {
-						System.out.println("No purchases have been made on this card");
-					}
-					break;
-				case 8:
-					if(myCards.hasPayment(cardChoice)) {
-						System.out.println("Most recent payment is " + myCards.getRecentPayment(cardChoice));
-					} else {
-						System.out.println("No payments have been made on this card");
-					}
-					break;
-				case 9:
-					manageCard();
-				}
-			} while(choice < 10);
+			System.out.println("Which card would you like to manage?");
+			System.out.println(myCards.toString());
+			System.out.println(myCards.getNumberOfCards() + 1 + ". Return to main menu");
+			int cardChoice = input.nextInt();
+			cardChoice = Validate.checkInt(1, myCards.getNumberOfCards()+1, cardChoice);
+			if(cardChoice == myCards.getNumberOfCards()+1) {
+				mainMenu();
+			}
+			else {
+				manageCard(cardChoice);
+			}
 		}
+	}
+	
+	public void manageCard(int cardChoice) {
+		
+		System.out.println(manageCard);
+		int choice;
+		do {
+			choice = input.nextInt(); 
+			choice = Validate.checkInt(1, manageCard.numberOfOptions(), choice);
+			
+			switch(choice) {
+			case 1:
+				System.out.println("Current balance is " + myCards.getCardBalance(cardChoice));
+				break;
+			case 2:
+				System.out.println("Credit Limit is " + myCards.getCardCreditLimit(cardChoice));
+				break;
+			case 3:
+				System.out.println("Available credit is " + myCards.getCardAvailCredit(cardChoice));
+				break;
+			case 4:
+				addPurchase(cardChoice);
+				break;
+			case 5:
+				addPayment(cardChoice);
+				break;
+			case 6:
+				addFee(cardChoice);
+				break;
+			case 7:
+				if(myCards.hasPurchases(cardChoice)) {
+					System.out.println("Most recent purchase was " + myCards.getRecentPurchase(cardChoice));
+				} else {
+					System.out.println("No purchases have been made on this card");
+				}
+				break;
+			case 8:
+				if(myCards.hasPayment(cardChoice)) {
+					System.out.println("Most recent payment is " + myCards.getRecentPayment(cardChoice));
+				} else {
+					System.out.println("No payments have been made on this card");
+				}
+				break;
+			case 9:
+				availableCards();
+			}
+		}
+		while(choice < 10);
+		
 	}
 	
 	
@@ -196,7 +212,9 @@ public class ManageCreditCards {
 		for(int i = 0; i< CreditCardType.values().length; i++) {
 			System.out.println((i+1) + ". " + CreditCardType.values()[i]);
 		}
-		int cardTypeChoice = Validate.getCheckInt(1, 3);
+		
+		int cardTypeChoice = input.nextInt();
+		cardTypeChoice = Validate.checkInt(1, CreditCardType.values().length, cardTypeChoice);
 		type = CreditCardType.values()[cardTypeChoice-1];
 		
 		System.out.println("What is the card number?");
@@ -226,7 +244,8 @@ public class ManageCreditCards {
 				System.out.println((i+1) + ". " + CreditCardStatus.values()[i]);
 			}
 			
-			int cardStatusChoice = Validate.getCheckInt(1, 3);
+			int cardStatusChoice = input.nextInt();
+			cardStatusChoice = Validate.checkInt(1, 3, cardStatusChoice);
 			status = CreditCardStatus.values()[cardStatusChoice-1];
 		}
 		
@@ -248,10 +267,17 @@ public class ManageCreditCards {
 		}
 		else {
 			System.out.println("Which card would you like to remove?");
-			System.out.println(myCards.toString());
-			int cardChoice = Validate.getCheckInt(1, myCards.getNumberOfCards());
-			myCards.removeCard(cardChoice);
-			System.out.println("Card removed \n");
+			System.out.println(myCards.toString() + (myCards.getNumberOfCards()+1) + ".Return to previous menu");
+			int cardChoice = input.nextInt();
+			cardChoice = Validate.checkInt(1, myCards.getNumberOfCards()+1, cardChoice);
+			if(cardChoice == myCards.getNumberOfCards()+1) {
+				mainMenu();
+			}
+			else {
+				myCards.removeCard(cardChoice);
+				System.out.println("Card removed \n");
+				System.out.println(manageWallet);
+			}
 		}		
 	}
 	
@@ -280,18 +306,20 @@ public class ManageCreditCards {
 			for(int i = 0; i< PurchaseType.values().length; i++) {
 				System.out.println((i+1) + ". " + PurchaseType.values()[i]);
 			}
-			int purchaseChoice = Validate.getCheckInt(1, 8);
+			int purchaseChoice = input.nextInt();
+			purchaseChoice = Validate.checkInt(1, 8, purchaseChoice);
 			purchaseType = PurchaseType.values()[purchaseChoice-1];
 			
 			vendor = getVendor();
 				try {
 					myCards.addPurchase(cardChoice,amount, date, purchaseType, vendor);
+					System.out.println("Purchase added \n");
 				} catch (OutOfCreditException e) {
 					e.getMessage();
 				}
 			
 		}
-		System.out.println("Purchase added \n");
+		System.out.println(manageCard);
 		
 	}
 	
@@ -312,10 +340,11 @@ public class ManageCreditCards {
 			if(i % 10 == 0) {
 				System.out.println();
 			}
-			System.out.print((i+1) + ". " + States.values()[i] + " ");
-			
+			System.out.print((i+1) + ". " + States.values()[i] + " ");			
 		}
-		int stateChoice = Validate.getCheckInt(1, 50);
+		System.out.println();
+		int stateChoice = input.nextInt();
+		stateChoice = Validate.checkInt(1, 50, stateChoice);
 		stateType = States.values()[stateChoice-1];
 		input.nextLine();
 		
@@ -340,7 +369,8 @@ public class ManageCreditCards {
 		for(int i = 0; i< PaymentType.values().length; i++) {
 			System.out.println((i+1) + ". " + PaymentType.values()[i]);
 		}
-		int paymentChoice = Validate.getCheckInt(1, 2);
+		int paymentChoice = input.nextInt();
+		paymentChoice = Validate.checkInt(1, 2, paymentChoice);
 		paymentType = PaymentType.values()[paymentChoice-1];
 		input.nextLine();
 		
@@ -355,7 +385,8 @@ public class ManageCreditCards {
 	    transactionDate = Validate.checkDate(userDate, myCards.getIssueDate(cardChoice)); 
 	    
 	    myCards.addPayment(cardChoice, paymentType, account, transAmount, transactionDate);
-		System.out.println("Payment added \n");
+		System.out.println("Payment added");
+		System.out.println(manageCard);
 		
 	}
 	
@@ -369,7 +400,6 @@ public class ManageCreditCards {
 			System.out.println("Account Number must be 10-12 digits");
 			accountNumber = input.nextLine();
 		}
-		
 		return new BankAccount(bankName, accountNumber);
 		
 	}
@@ -392,7 +422,8 @@ public class ManageCreditCards {
 			
 			System.out.println("1. Late Payment \n2. Interest");
 			System.out.print("\nPlease the number corresponding to the fee type: ");
-			int choice = Validate.getCheckInt(1, 2);
+			int choice = input.nextInt();
+			choice = Validate.checkInt(1, 2, choice);
 			
 			switch(choice) {
 			case 1: 
@@ -403,6 +434,8 @@ public class ManageCreditCards {
 				break;
 			}		
 			myCards.addFee(cardChoice, amount, date, TransactionType.FEE, type);
+			System.out.println("Fee Added");
+			System.out.println(manageCard);
 			
 		}
 	}

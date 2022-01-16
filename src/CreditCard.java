@@ -23,7 +23,7 @@ public class CreditCard implements Comparable<CreditCard>{
 						CreditCardType cardType, CreditCardStatus cardStatus, double cardLimit,
 						double currentBalance) {
 		this.cardNumber = cardNumber;
-		this.cardName = (cardType + "-" + cardNumber.substring(cardNumber.length()-5));
+		this.cardName = (cardType + "-" + cardNumber.substring(cardNumber.length()-4));
 		this.issueDate = issueDate;
 		this.expirationDate = expirationDate;
 		this.issueCompany = issueCompany;
@@ -32,7 +32,6 @@ public class CreditCard implements Comparable<CreditCard>{
 		this.creditCardLimit = cardLimit;
 		this.currentBalance = currentBalance;
 		this.availCredit = cardLimit - currentBalance;
-		//transactions = new ArrayList<>();
 		purchases = new ArrayList<>();
 		payments = new ArrayList<>();
 		fees = new ArrayList<>();

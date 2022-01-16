@@ -5,8 +5,7 @@ public class Validate {
 	
 	static Scanner input = new Scanner(System.in);
 	
-	public static int getCheckInt(int min, int max) {
-		int userInput = input.nextInt();
+	public static int checkInt(int min, int max, int userInput) {
 		while(userInput < min || userInput > max) {
 			if(min == max) {
 				System.out.println("You can only enter option " + min);		
