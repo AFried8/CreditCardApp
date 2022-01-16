@@ -31,8 +31,7 @@ public class Payment extends Transaction{
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append("Payment Type: " + paymentType);
-		str.append("\nAmount: " + getTransactionAmt());
+		str.append(paymentType + " - $" + getTransactionAmt());
 		return str.toString();
 	}
 }

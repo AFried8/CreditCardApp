@@ -18,9 +18,25 @@ public class Validate {
 		return userInput;
 	}
 	
+	public static int checkInt(int min, int max, int userInput, String message) {
+		while(userInput < min || userInput > max) {
+			System.out.println(message);
+			userInput = input.nextInt();
+		}
+		return userInput;
+	}
+	
 	public static double checkDouble(double min, double max, double userInput) {
 		while(userInput < min || userInput > max) {
 			System.out.println("Please enter a number that is at least " + min + " and no more than " + max);
+			userInput = input.nextDouble();
+		}
+		return userInput;
+	}
+	
+	public static double checkDouble(double min, double max, double userInput, String message) {
+		while(userInput < min || userInput > max) {
+			System.out.println(message);
 			userInput = input.nextDouble();
 		}
 		return userInput;

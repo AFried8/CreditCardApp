@@ -11,7 +11,7 @@ public class Purchase extends Transaction{
 		super(lastTransactionID, transactionAmt, transactionDate, TransactionType.PURCHASE);
 		this.purchaseType = purchaseType;
 		this.vendor = vendor;
-		name = (vendor.getName() + ": " + transactionAmt);
+		name = (vendor.getName() + ": $" + transactionAmt);
 	}
 
 	public PurchaseType getPurchaseType() {

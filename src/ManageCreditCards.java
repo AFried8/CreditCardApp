@@ -1,3 +1,8 @@
+//Need to change do-while loops to regular while loops because options need to be printed again after the user chooses
+//Can't just call a the main menu method... won't exit properly
+//Need to figure out how to clear the buffer in the date validation
+
+
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -179,7 +184,7 @@ public class ManageCreditCards {
 				break;
 			case 8:
 				if(myCards.hasPayment(cardChoice)) {
-					System.out.println("Most recent payment is " + myCards.getRecentPayment(cardChoice));
+					System.out.println("Most recent payment is \n" + myCards.getRecentPayment(cardChoice));
 				} else {
 					System.out.println("No payments have been made on this card");
 				}
@@ -218,7 +223,7 @@ public class ManageCreditCards {
 		type = CreditCardType.values()[cardTypeChoice-1];
 		
 		System.out.println("What is the card number?");
-		//input.nextLine();
+		input.nextLine();
 		cardNumber = input.nextLine();
 		while((type == CreditCardType.AMEX && cardNumber.length() != 15) 
 				|| (type != CreditCardType.AMEX && cardNumber.length() != 16)) {
@@ -251,11 +256,11 @@ public class ManageCreditCards {
 		
 		System.out.println("What is the credit limit for this card?");
 		creditLimit = input.nextDouble();
-		creditLimit = Validate.checkDouble(100.0, 500000.0, creditLimit); //lowest credit limit is $100, highest credit limit is $500,000
+		creditLimit = Validate.checkDouble(100.0, 500000.0, creditLimit, "Credit limit can be at minimum $100, and at maximum, $500,000");
 		
 		System.out.println("What is the current balance on this card?");
 		currentBalance = input.nextDouble();
-		currentBalance = Validate.checkDouble(-50.0, creditLimit, currentBalance);
+		currentBalance = Validate.checkDouble(-50.0, creditLimit, currentBalance, "Your balance can't be less than -50 or greater than your credit limit, " + creditLimit);
 		
 		myCards.addCard(cardNumber, issueDate, expirationDate, issueCompany, type, status, creditLimit, currentBalance);
 		System.out.println("Card added \n");
@@ -292,7 +297,8 @@ public class ManageCreditCards {
 		} else {
 			System.out.println("What is the purchase amount?");
 			amount = input.nextDouble();
-			amount = Validate.checkDouble(3.00, myCards.getCardAvailCredit(cardChoice), amount);
+			amount = Validate.checkDouble(0.00, myCards.getCardAvailCredit(cardChoice), amount, 
+											"You cannot make a purchase that's less than 0 or greater than your available credit, $" + myCards.getCardAvailCredit(cardChoice));
 			input.nextLine(); //to clear the buffer
 			
 			System.out.println("\nPlease enter purchase date: yyyy-mm-dd");
@@ -375,7 +381,7 @@ public class ManageCreditCards {
 		input.nextLine();
 		
 		account = createAccount();
-		System.out.println("What is the payment amount?");
+		System.out.println("How much do you wish to pay?");
 		transAmount = input.nextDouble();
 		transAmount = Validate.checkDouble(3.00, myCards.getCardBalance(cardChoice), transAmount);
 		input.nextLine();
