@@ -38,13 +38,11 @@ public class CreditCard implements Comparable<CreditCard>{
 	}
 	
 	public void addPurchase(double transactionAmt, LocalDate transactionDate, PurchaseType purchaseType, Vendor vendor) throws OutOfCreditException{
-		//questionable if the input validation belongs here
 		if(transactionAmt > availCredit) {
 			throw new OutOfCreditException();
 		}
 		Purchase thisPurchase = new Purchase(lastTransactionID, transactionAmt, transactionDate, purchaseType, vendor);
 		purchases.add(thisPurchase);
-		//Assuming all transactions are entered in the order they occurred;
 		lastTransactionID++;
 		currentBalance +=transactionAmt;
 		availCredit -= transactionAmt;
@@ -66,28 +64,10 @@ public class CreditCard implements Comparable<CreditCard>{
 		availCredit -= transactionAmt;
 	}
 	
-	public double getCurrentBalance() {
-		return currentBalance;
-	}
-	
-	public Purchase getLargestPurchase() {
-		//Check in user CreditCards if purchases is empty
-		double largestPurchaseAmt = 0;
-		Purchase largestPurchase = purchases.get(0);
-		for(Purchase p: purchases) {
-			if(p.getTransactionAmt() > largestPurchaseAmt) {
-				largestPurchaseAmt = p.getTransactionAmt();
-				largestPurchase = p;
-			}
-		}
-		return largestPurchase;
-	}
-	
-
 	public String getCardNumber() {
 		return cardNumber;
 	}
-	
+
 	public double getAvailCredit() {
 		return availCredit;
 	}
@@ -107,6 +87,15 @@ public class CreditCard implements Comparable<CreditCard>{
 	public LocalDate getIssueDate() {
 		return issueDate;
 	}
+	
+	public double getCurrentBalance() {
+		return currentBalance;
+	}
+	
+	public CreditCardStatus getCardStatus() {
+		return cardStatus;
+	}
+	
 	public double getTotalfees() {
 		double totalFees = 0;
 		for(Fee f: fees) {
@@ -114,7 +103,6 @@ public class CreditCard implements Comparable<CreditCard>{
 		}
 		return totalFees;
 	}
-	
 	
 	public String getMostRecentPurchase() {
 		//Check in CreditCards if Purchases is empty
@@ -128,7 +116,6 @@ public class CreditCard implements Comparable<CreditCard>{
 			}
 		}
 		return mostRecentPurchase.toString();
-		
 		}else {
 			throw new RuntimeException("There are no purchases on this credit card!"); 
 		}
@@ -145,22 +132,13 @@ public class CreditCard implements Comparable<CreditCard>{
 			}
 			return mostRecentPayment.toString();
 	}
+	
 	public boolean hasPurchases() {
 		return purchases.size() > 0;
 	}
 	
 	public boolean hasPayment() {
 		return payments.size() > 0;
-	}
-	public String status() {
-		StringBuilder str = new StringBuilder(this.toString());
-		str.append("\nBalance: " + currentBalance);
-		str.append("\nAvailable Credit: " + availCredit);
-		return str.toString();
-	}
-
-	public CreditCardStatus getCardStatus() {
-		return cardStatus;
 	}
 	
 	public String largestPurchase(){
@@ -218,20 +196,5 @@ public class CreditCard implements Comparable<CreditCard>{
 			return false;
 		return true;
 	}
-	
-	
-
-
-	/* private long getLastTransactionID() {
-		long lastTransactionID;
-		if(transactions.size()!=0) {
-			lastTransactionID = transactions.get(transactions.size()-1).getTransactionID();
-		}
-		else {
-			lastTransactionID = 0;
-		}
-		return lastTransactionID;
-	}
-	*/
 	
 }

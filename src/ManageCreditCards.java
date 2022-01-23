@@ -1,9 +1,5 @@
-//Need to change do-while loops to regular while loops because options need to be printed again after the user chooses
-//Can't just call a the main menu method... won't exit properly
-//Need to figure out how to clear the buffer in the date validation
-
-
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class ManageCreditCards {
@@ -49,7 +45,7 @@ public class ManageCreditCards {
 		manageCard.addOption("Add a fee");
 		manageCard.addOption("See my most recent purchase");
 		manageCard.addOption("See my most recent payment");
-		manageCard.addOption("Return to card list");
+		manageCard.addOption("Return to main menu");
 	}
 	
 	public void mainMenu() {
@@ -57,7 +53,7 @@ public class ManageCreditCards {
 		do {
 			System.out.println(mainMenu);
 			choice = input.nextInt();
-			choice = Validate.checkInt(1, mainMenu.numberOfOptions(), choice);
+			choice = validate(1, mainMenu.getNumberOfOptions(), choice);
 			switch (choice) {
 			case 1:
 				manageWallet();
@@ -66,7 +62,7 @@ public class ManageCreditCards {
 				financialStats();
 				break;
 			case 3:
-				availableCards();
+				manageCard();
 				break;
 			default:
 				System.out.println("Exiting... Thank you for using this program!");
@@ -79,7 +75,7 @@ public class ManageCreditCards {
 		do {
 			System.out.println(manageWallet);
 			choice = input.nextInt();
-			choice = Validate.checkInt(1, manageWallet.numberOfOptions(), choice);
+			choice = validate(1, manageWallet.getNumberOfOptions(), choice);
 			switch (choice) {
 			case 1:
 				addCard();
@@ -97,12 +93,10 @@ public class ManageCreditCards {
 		}
 		else {
 			int choice;
-			
 			do {
 				System.out.println(financialStats);
 				choice = input.nextInt();
-				choice = Validate.checkInt(1, financialStats.numberOfOptions(), choice);
-				
+				choice = validate(1, financialStats.getNumberOfOptions(), choice);
 				switch (choice) {
 				case 1: 
 					System.out.println("The total balance of all your cards is $" + myCards.totalBalance());
@@ -129,81 +123,58 @@ public class ManageCreditCards {
 		}
 	}
 	
-	public void availableCards() {
+	public void manageCard() {
 		if(myCards.getNumberOfCards() < 1) {
 			System.out.println("Sorry you don't have any cards to manage since you didn't register any cards. ");
 		}
 		else {
-			System.out.println("Which card would you like to manage?");
-			System.out.println(myCards.toString());
-			System.out.println(myCards.getNumberOfCards() + 1 + ". Return to main menu");
-			int cardChoice = input.nextInt();
-			cardChoice = Validate.checkInt(1, myCards.getNumberOfCards()+1, cardChoice);
-			if(cardChoice == myCards.getNumberOfCards()+1) {
-				mainMenu();
-			}
-			else {
-				manageCard(cardChoice);
-			}
-		}
-	}
-	
-	public void manageCard(int cardChoice) {
-		
-		System.out.println(manageCard);
-		int choice;
-		do {
-			choice = input.nextInt(); 
-			choice = Validate.checkInt(1, manageCard.numberOfOptions(), choice);
-			
-			switch(choice) {
-			case 1:
-				System.out.println("Current balance is " + myCards.getCardBalance(cardChoice));
-				break;
-			case 2:
-				System.out.println("Credit Limit is " + myCards.getCardCreditLimit(cardChoice));
-				break;
-			case 3:
-				System.out.println("Available credit is " + myCards.getCardAvailCredit(cardChoice));
-				break;
-			case 4:
-				addPurchase(cardChoice);
-				break;
-			case 5:
-				addPayment(cardChoice);
-				break;
-			case 6:
-				addFee(cardChoice);
-				break;
-			case 7:
-				if(myCards.hasPurchases(cardChoice)) {
-					System.out.println("Most recent purchase was " + myCards.getRecentPurchase(cardChoice));
-				} else {
-					System.out.println("No purchases have been made on this card");
+			int choice;
+			do {
+				System.out.println("Which card would you like to manage?");
+				System.out.println(myCards.toString());
+				int cardChoice = input.nextInt();
+				cardChoice = validate(1, myCards.getNumberOfCards(), cardChoice);
+				
+				System.out.println(manageCard);
+				choice = input.nextInt();
+				choice = validate(1, manageCard.getNumberOfOptions(), choice);
+				
+				switch(choice) {
+				case 1:
+					System.out.println("Current balance is " + myCards.getCardBalance(cardChoice));
+					break;
+				case 2:
+					System.out.println("Credit Limit is " + myCards.getCardCreditLimit(cardChoice));
+					break;
+				case 3:
+					System.out.println("Available credit is " + myCards.getCardAvailCredit(cardChoice));
+					break;
+				case 4:
+					addPurchase(cardChoice);
+					break;
+				case 5:
+					addPayment(cardChoice);
+					break;
+				case 6:
+					addFee(cardChoice);
+					break;
+				case 7:
+					if(myCards.hasPurchases(cardChoice)) {
+						System.out.println("Most recent purchase was " + myCards.getRecentPurchase(cardChoice));
+					} else {
+						System.out.println("No purchases have been made on this card");
+					}
+					break;
+				case 8:
+					if(myCards.hasPayment(cardChoice)) {
+						System.out.println("Most recent payment is " + myCards.getRecentPayment(cardChoice));
+					} else {
+						System.out.println("No payments have been made on this card");
+					}
+					break;
 				}
-				break;
-			case 8:
-				if(myCards.hasPayment(cardChoice)) {
-					System.out.println("Most recent payment is \n" + myCards.getRecentPayment(cardChoice));
-				} else {
-					System.out.println("No payments have been made on this card");
-				}
-				break;
-			case 9:
-				availableCards();
-			}
+			} while(choice < 9);
 		}
-		while(choice < 10);
-		
-	}
-	
-	
-	public LocalDate validateExpired(LocalDate date, int cardChoice) {
-		while(date.isAfter(myCards.getExpirationDate(cardChoice))){
-			System.out.println("Transaction date must be before expiration date. Please enter a new one");
-			String userDate = input.nextLine();
-			date = Validate.checkDate(userDate, myCards.getIssueDate(cardChoice) );
-		} return date;
 	}
 	
 	private void addCard() {
@@ -217,9 +188,8 @@ public class ManageCreditCards {
 		for(int i = 0; i< CreditCardType.values().length; i++) {
 			System.out.println((i+1) + ". " + CreditCardType.values()[i]);
 		}
-		
 		int cardTypeChoice = input.nextInt();
-		cardTypeChoice = Validate.checkInt(1, CreditCardType.values().length, cardTypeChoice);
+		cardTypeChoice = validate(1, 3, cardTypeChoice);
 		type = CreditCardType.values()[cardTypeChoice-1];
 		
 		System.out.println("What is the card number?");
@@ -230,11 +200,10 @@ public class ManageCreditCards {
 			System.out.println("Amex cards should be 15 digits long. All other cards, 16.");
 			cardNumber = input.nextLine();
 		}
-	
 		
 		System.out.println("When was the card issued? Please enter as yyyy-mm-dd");
 		String userDate = input.nextLine();
-		issueDate = Validate.checkDate(userDate, LocalDate.now().plusYears(-10));
+		issueDate = validateDate(userDate, LocalDate.now().plusYears(-10));
 		expirationDate = issueDate.plusYears(3); //The average credit card lasts three years
 		
 		System.out.println("Which company issued the card?");
@@ -250,40 +219,34 @@ public class ManageCreditCards {
 			}
 			
 			int cardStatusChoice = input.nextInt();
-			cardStatusChoice = Validate.checkInt(1, 3, cardStatusChoice);
+			cardStatusChoice = validate(1, 3, cardStatusChoice);
 			status = CreditCardStatus.values()[cardStatusChoice-1];
 		}
-		
 		System.out.println("What is the credit limit for this card?");
 		creditLimit = input.nextDouble();
-		creditLimit = Validate.checkDouble(100.0, 500000.0, creditLimit, "Credit limit can be at minimum $100, and at maximum, $500,000");
+		creditLimit = validateDouble(100.0, 500000.0, creditLimit); //lowest credit limit is $100, highest credit limit is $500,000
 		
 		System.out.println("What is the current balance on this card?");
 		currentBalance = input.nextDouble();
-		currentBalance = Validate.checkDouble(-50.0, creditLimit, currentBalance, "Your balance can't be less than -50 or greater than your credit limit, " + creditLimit);
+		currentBalance = validateDouble(-50.0, creditLimit, currentBalance);
 		
 		myCards.addCard(cardNumber, issueDate, expirationDate, issueCompany, type, status, creditLimit, currentBalance);
-		System.out.println("Card added \n");
+		System.out.println("Card added");
 	}
 	
 	public void removeCard() {
 		if(myCards.getNumberOfCards() < 1) {
-			System.out.println("Sorry, there are no cards registered.\n");
+			System.out.println("Sorry, there are no cards registered. \n");
 		}
 		else {
 			System.out.println("Which card would you like to remove?");
-			System.out.println(myCards.toString() + (myCards.getNumberOfCards()+1) + ".Return to previous menu");
+			System.out.println(myCards.toString());
 			int cardChoice = input.nextInt();
-			cardChoice = Validate.checkInt(1, myCards.getNumberOfCards()+1, cardChoice);
-			if(cardChoice == myCards.getNumberOfCards()+1) {
-				mainMenu();
-			}
-			else {
-				myCards.removeCard(cardChoice);
-				System.out.println("Card removed \n");
-				System.out.println(manageWallet);
-			}
-		}		
+			cardChoice = validate(1, myCards.getNumberOfCards(), cardChoice);
+			myCards.removeCard(cardChoice);
+			System.out.println("Card removed");
+		}
+		
 	}
 	
 	private void addPurchase(int cardChoice) {
@@ -291,19 +254,19 @@ public class ManageCreditCards {
 		LocalDate date; 
 		PurchaseType purchaseType;
 		Vendor vendor;
-		
-		if(myCards.getCardStatus(cardChoice) == CreditCardStatus.CANCELLED) {
-			System.out.println("We're sorry! Purchases cannot be added to cancelled credit cards.");		
+		if(myCards.getCardStatus(cardChoice) == CreditCardStatus.CANCELLED || myCards.getCardStatus(cardChoice) == CreditCardStatus.LOST ||
+				myCards.getCardAvailCredit(cardChoice) < .01) {
+			System.out.println("We're sorry! Purchases cannot be added to this card.");		
 		} else {
 			System.out.println("What is the purchase amount?");
 			amount = input.nextDouble();
-			amount = Validate.checkDouble(0.00, myCards.getCardAvailCredit(cardChoice), amount, 
-											"You cannot make a purchase that's less than 0 or greater than your available credit, $" + myCards.getCardAvailCredit(cardChoice));
-			input.nextLine(); //to clear the buffer
+	        double availCredit = myCards.getCardAvailCredit(cardChoice);
+			amount = validateDouble(0.00, availCredit, amount);
+			input.nextLine();
 			
 			System.out.println("\nPlease enter purchase date: yyyy-mm-dd");
 			String userDate = input.nextLine();
-			date = Validate.checkDate(userDate, myCards.getIssueDate(cardChoice)); //can only enter purchase within 5 years
+			date = validateDate(userDate, myCards.getIssueDate(cardChoice)); //can only enter purchase within 5 years
 			if(myCards.getCardStatus(cardChoice) == CreditCardStatus.EXPIRED) {
 				date = validateExpired(date, cardChoice);
 			}
@@ -313,20 +276,19 @@ public class ManageCreditCards {
 				System.out.println((i+1) + ". " + PurchaseType.values()[i]);
 			}
 			int purchaseChoice = input.nextInt();
-			purchaseChoice = Validate.checkInt(1, 8, purchaseChoice);
+			purchaseChoice = validate(1, 8, purchaseChoice);
 			purchaseType = PurchaseType.values()[purchaseChoice-1];
+			input.nextLine();
 			
 			vendor = getVendor();
-				try {
-					myCards.addPurchase(cardChoice,amount, date, purchaseType, vendor);
-					System.out.println("Purchase added \n");
-				} catch (OutOfCreditException e) {
-					e.getMessage();
-				}
+			try {
+				myCards.addPurchase(cardChoice,amount, date, purchaseType, vendor);
+				System.out.println("Purchase added");
+			} catch (OutOfCreditException e) {
+				e.getMessage();
+			}
 			
 		}
-		System.out.println(manageCard);
-		
 	}
 	
 	private Vendor getVendor() {
@@ -346,11 +308,11 @@ public class ManageCreditCards {
 			if(i % 10 == 0) {
 				System.out.println();
 			}
-			System.out.print((i+1) + ". " + States.values()[i] + " ");			
+			System.out.print((i+1) + ". " + States.values()[i] + " ");
+			
 		}
-		System.out.println();
 		int stateChoice = input.nextInt();
-		stateChoice = Validate.checkInt(1, 50, stateChoice);
+		stateChoice = validate(1, 50, stateChoice);
 		stateType = States.values()[stateChoice-1];
 		input.nextLine();
 		
@@ -369,30 +331,30 @@ public class ManageCreditCards {
 		BankAccount account;
 		Double transAmount;
 		LocalDate transactionDate;
+		
 		//payments can be made on any card type, including cancelled, since the user still may owe money
-		//int index, PaymentType paymentType, BankAccount account, double transactionAmt, LocalDate transactionDate
 		System.out.println("What is the payment type?");
 		for(int i = 0; i< PaymentType.values().length; i++) {
 			System.out.println((i+1) + ". " + PaymentType.values()[i]);
 		}
 		int paymentChoice = input.nextInt();
-		paymentChoice = Validate.checkInt(1, 2, paymentChoice);
+		paymentChoice = validate(1, 2, paymentChoice);
 		paymentType = PaymentType.values()[paymentChoice-1];
 		input.nextLine();
 		
 		account = createAccount();
-		System.out.println("How much do you wish to pay?");
+		System.out.println("What is the payment amount?");
 		transAmount = input.nextDouble();
-		transAmount = Validate.checkDouble(3.00, myCards.getCardBalance(cardChoice), transAmount);
+		transAmount = validateDouble(3.00, myCards.getCardBalance(cardChoice), transAmount);
 		input.nextLine();
 		
 		System.out.println("\nPlease enter payment date: yyyy-mm-dd");
 		String userDate = input.nextLine();
-	    transactionDate = Validate.checkDate(userDate, myCards.getIssueDate(cardChoice)); 
+	    transactionDate = validateDate(userDate, myCards.getIssueDate(cardChoice)); 
 	    
 	    myCards.addPayment(cardChoice, paymentType, account, transAmount, transactionDate);
-		System.out.println("Payment added");
-		System.out.println(manageCard);
+	    System.out.println("Payment added");
+		
 		
 	}
 	
@@ -406,6 +368,7 @@ public class ManageCreditCards {
 			System.out.println("Account Number must be 10-12 digits");
 			accountNumber = input.nextLine();
 		}
+		
 		return new BankAccount(bankName, accountNumber);
 		
 	}
@@ -419,17 +382,17 @@ public class ManageCreditCards {
 			
 			System.out.print("Please enter fee amount: ");
 			amount = input.nextDouble();
-			amount = Validate.checkDouble(0.0, 1000000, amount);
+			amount = validateDouble(0.0, 1000000, amount);
 			input.nextLine();
 			
 			System.out.println("\nPlease enter fee date: yyyy-mm-dd");
 			String userDate = input.nextLine();
-			date = Validate.checkDate(userDate, myCards.getIssueDate(cardChoice));
+			date = validateDate(userDate, myCards.getIssueDate(cardChoice));
 			
 			System.out.println("1. Late Payment \n2. Interest");
 			System.out.print("\nPlease the number corresponding to the fee type: ");
 			int choice = input.nextInt();
-			choice = Validate.checkInt(1, 2, choice);
+			choice = validate(1, 2, choice);
 			
 			switch(choice) {
 			case 1: 
@@ -440,9 +403,59 @@ public class ManageCreditCards {
 				break;
 			}		
 			myCards.addFee(cardChoice, amount, date, TransactionType.FEE, type);
-			System.out.println("Fee Added");
-			System.out.println(manageCard);
 			
 		}
+	}
+	
+public int validate(int min, int max, int userInput) {
+		
+		while(userInput < min || userInput > max) {
+			if(min == max) {
+				System.out.println("You can only enter option " + min);		
+			}
+			else {
+				System.out.println("Please enter numbers " + min + "-" + max + " as they correspond to the options");
+			}
+			userInput = input.nextInt();
+		}
+		return userInput;
+	}
+	
+	private double validateDouble(double min, double max, double userInput) {
+		while(userInput < min || userInput > max) {
+			System.out.println("Please enter a number that is at least " + min + " and no more than " + max);
+			userInput = input.nextDouble();
+		}
+		return userInput;
+	}
+	
+	public LocalDate validateDate(String userInput,LocalDate issueDate) {
+		LocalDate date = LocalDate.now(); //this date will be changed
+		boolean invalidFormat = true;
+		while(invalidFormat) {
+			try {
+			date = LocalDate.parse(userInput);
+			invalidFormat = false;
+			}
+			catch(Exception e) {
+				System.out.println("Please enter the date as yyyy-mm-dd");
+				userInput = input.nextLine();
+			}
+		}
+		
+		while(date.isAfter(LocalDate.now()) || date.isBefore(issueDate)){
+			System.out.println("This date is invalid. Please enter a new one");
+			userInput = input.nextLine();
+			date = validateDate(userInput, issueDate);
+		}
+		return date;
+	}
+	
+	public LocalDate validateExpired(LocalDate date, int cardChoice) {
+		while(date.isAfter(myCards.getExpirationDate(cardChoice))){
+			System.out.println("Transaction date must be before expiration date. Please enter a new one");
+			String userDate = input.nextLine();
+			date = validateDate(userDate, myCards.getIssueDate(cardChoice) );
+		} return date;
 	}
 }

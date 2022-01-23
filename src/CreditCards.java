@@ -9,14 +9,25 @@ public class CreditCards {
 		cards = new ArrayList<CreditCard>();
 	}
 	
-	public ArrayList<String> activeCards() {
-		ArrayList<String> activeCards = new ArrayList<>();
-		for(CreditCard card: cards) {
-			if(card.getCardStatus() == CreditCardStatus.ACTIVE) {
-				activeCards.add(card.getCardName());
-			}
+	public boolean addCard(String cardNumber, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
+			CreditCardType cardType, CreditCardStatus cardStatus, double cardLimit,
+			double currentBalance) {
+		CreditCard newCard = new CreditCard(cardNumber, issueDate, expirationDate, issueCompany, cardType, cardStatus, cardLimit, currentBalance);
+		if(cards.contains(newCard)) {
+			return false;
 		}
-		return activeCards;
+		else {
+			cards.add(newCard);
+			return true;
+		}
+	}
+	
+	public void removeCard(int index) {
+		cards.remove(index-1);
+	}
+
+	public int getNumberOfCards() {
+		return cards.size();
 	}
 	
 	public double totalBalance() {
@@ -33,23 +44,6 @@ public class CreditCards {
 			availCredit += card.getAvailCredit();
 		}
 		return availCredit;
-	}
-	
-	public boolean addCard(String cardNumber, LocalDate issueDate, LocalDate expirationDate, String issueCompany,
-						CreditCardType cardType, CreditCardStatus cardStatus, double cardLimit,
-						double currentBalance) {
-		CreditCard newCard = new CreditCard(cardNumber, issueDate, expirationDate, issueCompany, cardType, cardStatus, cardLimit, currentBalance);
-		if(cards.contains(newCard)) {
-			return false;
-		}
-		else {
-			cards.add(newCard);
-			return true;
-		}
-	}
-	
-	public void removeCard(int index) {
-		cards.remove(index-1);
 	}
 	
 	public void addPurchase(int index, double transactionAmt, LocalDate transactionDate, PurchaseType purchaseType, Vendor vendor) throws OutOfCreditException {
@@ -74,9 +68,6 @@ public class CreditCards {
 		return cards.get(index-1).getCreditLimit();
 	}
 	
-	public int getNumberOfCards() {
-		return cards.size();
-	}
 	public LocalDate getExpirationDate(int index) {
 		return cards.get(index-1).getExpirationDate();
 	}
@@ -109,11 +100,14 @@ public class CreditCards {
 	public String largestPurchase() {
 		double largestPurchase = 0.0;
 		String largestPurchaseName = "";
+		
 		for(CreditCard card: cards) {
-			Double cardsLargestPurchase = Double.parseDouble(card.largestPurchase().split("##")[0]);
-			if(cardsLargestPurchase > largestPurchase) {
-				largestPurchase = cardsLargestPurchase;
-				largestPurchaseName = card.largestPurchase().split("##")[1];
+			if(card.hasPurchases()) {
+				Double cardsLargestPurchase = Double.parseDouble(card.largestPurchase().split("##")[0]);
+				if(cardsLargestPurchase > largestPurchase) {
+					largestPurchase = cardsLargestPurchase;
+					largestPurchaseName = card.largestPurchase().split("##")[1];
+				}
 			}
 		}
 		return largestPurchaseName;

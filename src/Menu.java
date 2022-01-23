@@ -14,7 +14,7 @@ public class Menu {
 		options.add(option);
 	}
 	
-	public int numberOfOptions() {
+	public int getNumberOfOptions() {
 		return options.size();
 	}
 	
